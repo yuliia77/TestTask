@@ -9,8 +9,10 @@ namespace FrameworkDemo.framework
 
         public static String GetValue(string key)
         {
-            return cofiguration.AppSettings.Settings[key].Value;
+            String env = Environment.GetEnvironmentVariable(key);
+            return env != null ? env : cofiguration.AppSettings.Settings[key].Value;
         }
+
 
     }
 }
