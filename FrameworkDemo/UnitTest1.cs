@@ -24,6 +24,7 @@ namespace FrameworkDemo
         const string year = "2000";
         const string filename = "SteamSetup.exe";
 
+        [TestCategory("Smoke")]
         [TestMethod]
         public void TestMethod1()
         {
@@ -68,10 +69,41 @@ namespace FrameworkDemo
 
             Logger.Step(9, "Wait until exe file is downloaded");
             FileUtils.WaitForFileDownload(filename);
-
-            
            
         }
+
+        [TestCategory("Smoke")]
+        [TestMethod]
+        public void TestMethod2()
+        {
+            Logger.Step(1);
+            HomePage homePage = new HomePage();
+            homePage.NavigateToMenuItem("Games", "Action");
+
+            Logger.Step(2);
+            ActionPage actionPage = new ActionPage();
+            actionPage.GoToAllSpecials();
+
+        }
+
+        [TestCategory("Mat")]
+        [TestMethod]
+        public void TestMethod3()
+        {
+            Logger.Step(1);
+            HomePage homePage = new HomePage();
+            homePage.NavigateToMenuItem("Games", "Action");
+
+            Logger.Step(2);
+            ActionPage actionPage = new ActionPage();
+            actionPage.GoToAllSpecials();
+
+            Assert.IsFalse(true);
+
+        }
+
+
+
         [TestCleanup]
         public void CleanDownloads()
         {
