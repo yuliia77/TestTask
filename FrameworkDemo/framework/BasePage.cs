@@ -36,7 +36,7 @@ namespace FrameworkDemo.framework
 
         public void AssertTitleIsPresent(string pageTitle)
         {
-            Logger.Info(string.Format("Page that contains \"{0}\" title is found", pageTitle));
+            Logger.Info(string.Format("Page \"{0}\" is found", pageTitle));
             Browser.GetInstance().GetWait().Until(ExpectedConditions.TitleContains(pageTitle));
         }
 

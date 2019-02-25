@@ -19,10 +19,6 @@ namespace FrameworkDemo
     [TestClass]
     public class UnitTest1 : BaseTest
     {
-        const string day = "10";
-        const string month = "May";
-        const string year = "2000";
-        const string filename = "SteamSetup.exe";
 
         [TestCategory("Smoke")]
         [TestMethod]
@@ -30,89 +26,81 @@ namespace FrameworkDemo
         {
             Logger.Step(1);
             HomePage homePage = new HomePage();
-            homePage.NavigateToMenuItem("Games", "Action");
+            TopMenu topMenu = new TopMenu();
+            int i = 0;
+            int n = 2;
+            string[] engine = new string[n];
+            string[] transmission = new string[n];
+            string[] make = new string[n];
+            string[] model = new string[n];
+            string[] year = new string[n];
+            Logger.Step(2, "Search for 2 data sets of car models");
 
-            Logger.Step(2);
-            ActionPage actionPage = new ActionPage();
-            actionPage.GoToAllSpecials();
+            while (i <= n-1)
+            {
+                topMenu.ClickOnMenuItem("Research");
+                
+                ResearchPage researchPage = new ResearchPage();
+                researchPage.SelectOptionByRandomIndexInDrd("make");
+                make[i] = researchPage.GetSelectedOptionsText("make");
+                researchPage.SelectOptionByRandomIndexInDrd("model");
+                model[i] = researchPage.GetSelectedOptionsText("model");
+                researchPage.SelectOptionByRandomIndexInDrd("year");
+                year[i] = researchPage.GetSelectedOptionsText("year");
+                researchPage.ClickSearch();
 
-            Logger.Step(3);
-            SpecialsPage specialsPage = new SpecialsPage();
-            var maxDiscount = specialsPage.FindMaxDiscount();
-            var maxDiscounttext = specialsPage.GetMaxDiscountText(maxDiscount);
-            var maxFinalPricetext = specialsPage.GetFinalPriceTextForMaxDiscount(maxDiscount);            
-            specialsPage.ClickMaxDiscount(maxDiscount);
+                CarDetailsPage carDetailsPage = new CarDetailsPage();
+                Assert.IsTrue((carDetailsPage.GetHeaderText().Contains(model[i]) && carDetailsPage.GetHeaderText().Contains(make[i])), "Found car doesn't match the characteristics selected on Home page ");
+                while (!carDetailsPage.CheckIfLinkIsPresent("trim-compare"))
+                    {
+                        topMenu.ClickOnMenuItem("Research");
+                        researchPage.SelectOptionByRandomIndexInDrd("make");
+                        make[i] = researchPage.GetSelectedOptionsText("make");
+                        researchPage.SelectOptionByRandomIndexInDrd("model");
+                        model[i] = researchPage.GetSelectedOptionsText("model");
+                        researchPage.SelectOptionByRandomIndexInDrd("year");
+                        year[i] = researchPage.GetSelectedOptionsText("year");
+                        researchPage.ClickSearch();
+                        Assert.IsTrue((carDetailsPage.GetHeaderText().Contains(model[i]) && carDetailsPage.GetHeaderText().Contains(make[i])), "Found car doesn't match the characteristics selected on Home page ");
+                    }
+                
+                carDetailsPage.ClickLink("trim-compare");
+
+                TrimsPage trimsPage = new TrimsPage();
+                Assert.IsTrue((trimsPage.GetHeaderText().Contains(model[i]) && trimsPage.GetHeaderText().Contains(make[i])), "Found car doesn't match the characteristics selected on Home page ");
+                engine[i] = trimsPage.GetCharacteristicByIndex(trimsPage.GetIndexByCharacteristic("Engine"));
+                transmission[i] = trimsPage.GetCharacteristicByIndex(trimsPage.GetIndexByCharacteristic("Trans"));
+                i++;
+
+            }
+            Logger.Step(3, "Click on Research");
+            topMenu.ClickOnMenuItem("Research");            
+            ResearchPage researchPage2 = new ResearchPage();
 
             Logger.Step(4);
-            if (Browser.GetInstance().GetDriver().Url.Contains("agecheck"))
-            {
-                AgeCheckPage ageCheckPage = new AgeCheckPage();
-                ageCheckPage.SelectDateMonthYear(day, month, year);
-                ageCheckPage.ClickViewPage();
-            }
+            researchPage2.ClickCompareCars();
 
             Logger.Step(5);
-            GameDetailsPage gamesDetailsPage = new GameDetailsPage();
-            var currentDiscounttext = gamesDetailsPage.GetCurrentDiscountText();
+            ComparePage comparePage = new ComparePage();
+            comparePage.SelectMakeModelYearByText(make[0], model[0], year[0]);
+            comparePage.ClickStartComparing();
 
             Logger.Step(6);
-            var finalPricetext = gamesDetailsPage.GetFinalPriceText();
-            Assert.AreEqual(maxDiscounttext, currentDiscounttext, "Values of max discount on Specials and Game Details pages don't match");
-            Assert.IsTrue(maxFinalPricetext.EndsWith(finalPricetext), "Values of final price on Specials and Game Details pages don't match");
+            CompareDetailsPage compareDetailsPage = new CompareDetailsPage();
+            compareDetailsPage.ClickAddAnotherCar();
+            comparePage.SelectMakeModelYearByText(make[1], model[1], year[1]);
+            compareDetailsPage.ClickDoneToAddCar();
 
-            Logger.Step(7);
-            gamesDetailsPage.ClickInstallSteam();
-
-            Logger.Step(8);
-            AboutPage aboutPage = new AboutPage();
-            aboutPage.ClickInstallSteamNow();
-
-            Logger.Step(9, "Wait until exe file is downloaded");
-            FileUtils.WaitForFileDownload(filename);
+            Logger.Step(7, "Compare selected cars characteristics on the current page to the ones from Trims pages");
+            for (int j=0; j<2; j++)
+            {
+                Assert.IsTrue(compareDetailsPage.GetCharacteristicValue("Engine", j + 1).Contains(engine[j]));
+                Assert.IsTrue(compareDetailsPage.GetCharacteristicValue("Transmission", j + 1).Contains(transmission[j]));
+                Assert.IsTrue(compareDetailsPage.GetHeaderText(j + 1).Contains(make[j]) && compareDetailsPage.GetHeaderText(j + 1).Contains(year[j]));
+            }
            
         }
+    }
 
-        [TestCategory("Smoke")]
-        [TestMethod]
-        public void TestMethod2()
-        {
-            Logger.Step(1);
-            HomePage homePage = new HomePage();
-            homePage.NavigateToMenuItem("Games", "Action");
-
-            Logger.Step(2);
-            ActionPage actionPage = new ActionPage();
-            actionPage.GoToAllSpecials();
-
-        }
-
-        [TestCategory("Mat")]
-        [TestMethod]
-        public void TestMethod3()
-        {
-            Logger.Step(1);
-            HomePage homePage = new HomePage();
-            homePage.NavigateToMenuItem("Games", "Action");
-
-            Logger.Step(2);
-            ActionPage actionPage = new ActionPage();
-            actionPage.GoToAllSpecials();
-
-            Assert.IsFalse(true);
-
-        }
-
-
-
-        [TestCleanup]
-        public void CleanDownloads()
-        {
-            Logger.Info("Delete downloaded file from the folder");
-            DirectoryInfo dir = new DirectoryInfo(ConfigurationReader.GetValue("DownloadPath"));
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                file.Delete();
-            }
-        }
 }
-}
+

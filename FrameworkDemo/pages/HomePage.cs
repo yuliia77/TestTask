@@ -11,17 +11,8 @@ namespace FrameworkDemo.pages
 {
     public class HomePage : BasePage
     {
-        string lblMenuItemLocator = "//*[@class='pulldown_desktop'][text()='{0}']";
-        string lblMenuSubItemLocator = "//div[@class='store_nav']//*[contains(@class, 'focus')]/following-sibling::div[1]//a[normalize-space(text()) = '{0}']";
 
-        public HomePage() : base(By.XPath("//*[contains(@class, 'home_cluster_ctn')]"), "Home Page") { }
-
-        public void NavigateToMenuItem(string category, string subcategory)
-        {
-            new Label(By.XPath(string.Format(lblMenuItemLocator, category)), category).MoveToElement();
-            new Label(By.XPath(string.Format(lblMenuSubItemLocator, subcategory)), subcategory).ClickJS();
-        }
-
+        public HomePage() : base(By.XPath("//a[@data-linkname='header-home']"), "Home Page") { }
 
 
     }

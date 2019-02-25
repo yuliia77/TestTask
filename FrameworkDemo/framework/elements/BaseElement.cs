@@ -40,6 +40,7 @@ namespace FrameworkDemo.framework.elements
             return Browser.GetInstance().GetWait().Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
+
         public void ClickJS()
         {
             Logger.Info(string.Format("Click on \"{0}\"", name));

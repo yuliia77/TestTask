@@ -30,5 +30,42 @@ namespace FrameworkDemo.framework.elements
             return texts;
         }
 
+        public int GetIndex(string element)
+        {
+            Logger.Info(string.Format("Get index of \"{0}\"", name));
+            IReadOnlyCollection<IWebElement> elements = Browser.GetInstance().GetDriver().FindElements(locator);
+            List<string> texts = new List<string>();
+            foreach (IWebElement el in elements)
+            {
+                texts.Add(el.Text);
+            }
+            return texts.IndexOf(element);
+        }
+
+        public string GetTextByIndex(int index)
+        {
+            Logger.Info(string.Format("Get text from \"{0}\" by index \"{1}\"", name, index));
+            IReadOnlyCollection<IWebElement> elements = Browser.GetInstance().GetDriver().FindElements(locator);
+            List<string> texts = new List<string>();
+            foreach (IWebElement el in elements)
+            {
+                texts.Add(el.Text);
+            }
+            return texts[index];
+        }
+
+        public List<string> GetAllElements()
+        {
+            Logger.Info(string.Format("Get all elements from \"{0}\"", name));
+            IReadOnlyCollection<IWebElement> elements = Browser.GetInstance().GetDriver().FindElements(locator);
+            List<string> texts = new List<string>();
+            foreach (IWebElement element in elements)
+            {
+                texts.Add(element.ToString());
+            }
+            return texts;
+        }
+
+
+        }
     }
-}

@@ -12,8 +12,6 @@ namespace FrameworkDemo.framework.Utils
         {
             Browser.GetInstance().GetWait().Until(driver =>
             {
-                //return File.Exists((ConfigurationReader.GetValue("DownloadPath") + "/" + filename));
-
                 if (ConfigurationReader.GetValue("Browser") == "chrome")
                 {
                     return File.Exists((ConfigurationReader.GetValue("DownloadPath") + "/" + filename)) && new System.IO.FileInfo(ConfigurationReader.GetValue("DownloadPath") + "/" + filename).Length > 0 && Directory.GetFiles(ConfigurationReader.GetValue("DownloadPath"), "*.tmp").Length == 0 && Directory.GetFiles(ConfigurationReader.GetValue("DownloadPath"), "*.crdownload").Length == 0;
