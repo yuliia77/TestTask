@@ -1,4 +1,5 @@
-﻿using FrameworkDemo.framework;
+﻿using FrameworkDemo.Entities;
+using FrameworkDemo.framework;
 using FrameworkDemo.framework.elements;
 using OpenQA.Selenium;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace FrameworkDemo.pages
 {
-    public class ComparePage : BasePage
+    public class ComparePage : BaseCarsPage
     {
         DropDownList drdMake = new DropDownList(By.CssSelector("select#make-dropdown"), "Make");
         DropDownList drdModel = new DropDownList(By.CssSelector("select#model-dropdown"), "Model");
@@ -27,6 +28,11 @@ namespace FrameworkDemo.pages
         public void ClickStartComparing()
         {
             btnStartComparing.Click();
+        }
+
+        public void SelectCar(Car car)
+        {
+            SelectMakeModelYearByText(car.Make, car.Model, car.Year);
         }
     }
 

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FrameworkDemo.pages
 {
-    public class CompareDetailsPage : BasePage
+    public class CompareDetailsPage : BaseCarsPage
     {
         public CompareDetailsPage() : base(By.XPath("//h1[@id='main-headline'][contains(text(), 'Model Compare')]"), "Model Compare Page") { }
         Label lblAddAnotherCar = new Label(By.XPath("//div[@class='add-car-icon']"), "Add Another Car");

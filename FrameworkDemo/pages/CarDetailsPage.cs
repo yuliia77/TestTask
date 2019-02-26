@@ -8,7 +8,7 @@ using System.Text;
 
 namespace FrameworkDemo.pages
 {
-    public class CarDetailsPage : BasePage
+    public class CarDetailsPage : BaseCarsPage
     {
         Label lblHeader = new Label(By.XPath("//h1[@class='cui-page-section__title']"), "Car name title");
         //Label lblTrims = new Label(By.XPath("//*[@data-linkname='trim-compare']"), "Compare Trims");
@@ -27,17 +27,10 @@ namespace FrameworkDemo.pages
 
         }
 
-        public bool CheckIfLinkIsPresent(string linkData)
+        public bool IsLinkPresent(string linkData)
         {
-            if (new Label(By.XPath(string.Format(lblLink, linkData)), linkData).GetAllElements().Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
+            return new Label(By.XPath(string.Format(lblLink, linkData)), linkData).GetAllElements().Count != 0;
+            
 
         }
 

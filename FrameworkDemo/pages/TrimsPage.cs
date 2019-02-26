@@ -1,4 +1,5 @@
-﻿using FrameworkDemo.framework;
+﻿using FrameworkDemo.Entities;
+using FrameworkDemo.framework;
 using FrameworkDemo.framework.elements;
 using OpenQA.Selenium;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace FrameworkDemo.pages
 {
-    public class TrimsPage : BasePage
+    public class TrimsPage : BaseCarsPage
     {
         Button btnViewPage = new Button(By.XPath("//a[@onclick='ViewProductPage()']"), "View Page");
         Label lblCompareTrimsHeader = new Label(By.XPath("//h1[@class='cui-heading-1']"), "Compare Trims header");
@@ -31,6 +32,12 @@ namespace FrameworkDemo.pages
             return lblCharacteristicValues.GetTextByIndex(index);
         }
 
+        public void UpdateCharacteristics(Car car)
+        {
+            car.Engine = GetCharacteristicByIndex(GetIndexByCharacteristic("Engine"));
+            car.Transmission = GetCharacteristicByIndex(GetIndexByCharacteristic("Trans"));
+
+        }
 
 
     }

@@ -9,9 +9,8 @@ using OpenQA.Selenium.Support.UI;
 
 namespace FrameworkDemo.pages
 {
-    public class HomePage : BasePage
+    public class HomePage : BaseCarsPage
     {
-
         public HomePage() : base(By.XPath("//a[@data-linkname='header-home']"), "Home Page") { }
 
 
